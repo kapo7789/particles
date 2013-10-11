@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		
+		<title>WRONG WAY</title>
+
+		<script type="text/javascript" src="core/three.min.js"></script>
+
+		<script type="text/javascript" src="core/controls/OrbitControls.js"></script>
+
+		<script type="text/javascript" src="core/shaders/CopyShader.js"></script>
+		<script type="text/javascript" src="core/shaders/ConvolutionShader.js"></script>
+		<script type="text/javascript" src="core/shaders/FXAAShader.js"></script>
+		<script type="text/javascript" src="core/shaders/FilmShader.js"></script>
+		<script type="text/javascript" src="core/shaders/BlendShader.js"></script>
+		<script type="text/javascript" src="core/shaders/RGBShiftShader.js"></script>
+
+		<script type="text/javascript" src="core/postprocessing/EffectComposer.js"></script>
+		<script type="text/javascript" src="core/postprocessing/MaskPass.js"></script>
+		<script type="text/javascript" src="core/postprocessing/RenderPass.js"></script>
+		<script type="text/javascript" src="core/postprocessing/BloomPass.js"></script>
+		<script type="text/javascript" src="core/postprocessing/ShaderPass.js"></script>
+		<script type="text/javascript" src="core/postprocessing/FilmPass.js"></script>
+		<script type="text/javascript" src="app/App.js?version=1"></script>
+		<script type="text/javascript" src="models/misc.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+	</head>
+	<body>
+		<a style="position:fixed; left: 5px; top: 5px; background: #333; padding: 3px; z-index:999; font: normal 12px Arial; text-decoration: none; color: #fff; border: solid 1px #888;"
+			href="javascript:App.useComposer = !App.useComposer">postprocessing on/off</a>
+		<script>
+			(function(){
+			App.start({ useComposer: true, filmPass: true, rgbPass: true });
+
+			App.loadEnvironment();
+
+			App.add(new THREE.AmbientLight(0));
+
+			var light = new THREE.PointLight(0x3040ff, 1, 350);
+			light.position = new THREE.Vector3(120,130,-100);
+			light.castShadow = true;
+			light2 = new THREE.PointLight(0xff1012, 1, 250);
+			light2.position = new THREE.Vector3(-50,50,110);
+			light2.castShadow = true;
+			var colors = [];
+			exporto = JSON.parse(exporto);
+			console.log(exporto.length);
+
+			len = exporto.length;
+			width = exporto[0].w;
+			height = exporto[0].h;
+			for(i=1;i<len;i++)
+				colors[i-1] = new THREE.Color(parseInt(exporto[i].c,16));
+			
+			particles = new THREE.Geometry();
+			scale = 5;
+			var cn=0;
+			for(i=0;i<width;i++)
+				for(j=0;j<height;j++)
+				{
+					particle = new THREE.Vertex(new THREE.Vector3(i*(scale),j*scale,-exporto[cn].d/(scale-2)));
+					particles.vertices.push(particle);
+					cn++;
+				}
+			particles.colors = colors;
+						// material
+			material = new THREE.ParticleBasicMaterial( {
+			    size: 12,
+			    transparent: true,
+			    opacity: 0.7,
+			    vertexColors: true,
+			    blending: THREE.AdditiveBlending
+
+			} );
+
+			// particle system
+			App.particleSystem = new THREE.ParticleSystem( particles, material );
+			App.particleSystem.rotation.z=3.1;
+			App.add(App.particleSystem);
+			// var loader = new THREE.JSONLoader();
+			// var ship;
+   //      	loader.load( "models/ship.js", function(geometry){
+ 		// 		//var material = new THREE.MeshLambertMaterial( {color: 0xffffff, side: THREE.DoubleSide, shading: THREE.FlatShading } );
+ 		// 		pMaterial =
+   //    new THREE.ParticleBasicMaterial({
+   //      color: 0xFFFFFF,
+   //      size: 1
+   //    });
+   //    			obj = new THREE.ParticleSystem(geometry, pMaterial);
+   //          	//obj = new THREE.Mesh( geometry, material );
+   //         		obj.scale.set(50,50,50);
+   //         		obj.receiveShadow = true;
+   //         		obj.castShadow = true;
+   //         		obj.position = new THREE.Vector3(0,0,0);
+   //         		obj.rotation.x=23.5;
+   //          	App.add( obj );
+   //          	ship = obj;
+   //          	App.collidable = ship;
+   //      	} );
+			
+			//App.add(light);
+			App.add(light2);
+
+			var pluis=0.02;
+			App.onAnimate = function()
+			{
+				light2.intensity+=pluis;
+				if(light2.intensity>=1.0)
+					pluis = -0.02;
+				if(light2.intensity<=0)
+					pluis = 0.02;
+				App.sun.material.size=1000+Math.random()*50;
+			}
+			})();
+
+		</script>
+	</body>
+</html>
