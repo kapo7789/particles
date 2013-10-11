@@ -79,40 +79,9 @@
 			App.particleSystem = new THREE.ParticleSystem( particles, material );
 			App.particleSystem.rotation.z=3.1;
 			App.add(App.particleSystem);
-			// var loader = new THREE.JSONLoader();
-			// var ship;
-   //      	loader.load( "models/ship.js", function(geometry){
- 		// 		//var material = new THREE.MeshLambertMaterial( {color: 0xffffff, side: THREE.DoubleSide, shading: THREE.FlatShading } );
- 		// 		pMaterial =
-   //    new THREE.ParticleBasicMaterial({
-   //      color: 0xFFFFFF,
-   //      size: 1
-   //    });
-   //    			obj = new THREE.ParticleSystem(geometry, pMaterial);
-   //          	//obj = new THREE.Mesh( geometry, material );
-   //         		obj.scale.set(50,50,50);
-   //         		obj.receiveShadow = true;
-   //         		obj.castShadow = true;
-   //         		obj.position = new THREE.Vector3(0,0,0);
-   //         		obj.rotation.x=23.5;
-   //          	App.add( obj );
-   //          	ship = obj;
-   //          	App.collidable = ship;
-   //      	} );
-			
-			//App.add(light);
+
 			App.add(light2);
 
-			var pluis=0.02;
-			App.onAnimate = function()
-			{
-				light2.intensity+=pluis;
-				if(light2.intensity>=1.0)
-					pluis = -0.02;
-				if(light2.intensity<=0)
-					pluis = 0.02;
-				App.sun.material.size=1000+Math.random()*50;
-			}
 			})();
 
 		</script>
